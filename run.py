@@ -1,12 +1,21 @@
 import os
+import re
 
-# Fő mappa elérési útja (ahol a 'videos' és 'titles.txt' található)
+# Fő mappa elérési útja (ahol a 'videos' és a 'titles.txt' található)
 main_folder = os.path.dirname(os.path.abspath(__file__))
 videos_folder = os.path.join(main_folder, "videos")
 titles_file = os.path.join(main_folder, "titles.txt")
 
-# Videók listázása a 'videos' mappából (csak mp4 fájlok)
-video_files = [f for f in os.listdir(videos_folder) if f.lower().endswith(".mp4")]
+# Natural sort függvény (számokat is helyesen kezeli)
+def natural_sort_key(s):
+    # Felbontja a szöveget számokra és szövegre, pl. "video10.mp4" → ["video", 10, ".mp4"]
+    return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
+
+# Videók listázása a 'videos' mappából (csak mp4 fájlok), természetes sorrendben
+video_files = sorted(
+    [f for f in os.listdir(videos_folder) if f.lower().endswith(".mp4")],
+    key=natural_sort_key
+)
 
 # Címek beolvasása a titles.txt-ből
 with open(titles_file, "r", encoding="utf-8") as f:
