@@ -1,3 +1,5 @@
+public/*
+!public/.gitkeep
 videos/*
 !videos/.gitkeep
 venv/

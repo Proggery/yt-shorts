@@ -9,6 +9,7 @@ from googleapiclient.http import MediaFileUpload
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
 VIDEOS_FOLDER = "public"  # videók mappája
+TITLES_FILE = "titles.txt"  # címek fájlja
 
 DESCRIPTION_TEMPLATE = """Te is rajongsz a Fortnite: Battle Royale és a Call Of Duty: Warzone 2.0 rejtelmes világáért, illetve szereted nézni a különböző háborús, akciós multiplayer játékok online közvetítését? Akkor itt a helyed a GeryHell csatornán! Ne habozz és iratkozz fel a csatornára, hogy ne maradj le egy közvetítésről sem! Ha van bármilyen gondolatod a videóval kapcsolatban, örülnék ha egy kommentel megosztanád velem, legyen az pozitív vagy akár negatív gondolat is, és mind a kettőt örömmel fogom olvasni! Örülnék, ha te is közénk tartoznál, és mivel még kezdetleges csatornáról van szó, ami bármelyik pillanatban kirobbanhat, így ragadd meg mihamarabb az alkalmat a csatlakozásra, hogy az elsők köztett lehess! Gyere és szórakozzunk együtt :)
 
@@ -41,56 +42,18 @@ A GeryHell csatorna közvetítései:
 #játék #magyar #fortnite #bs #brawlstars #fortnitemagyar #fortnitemagyarul #fortnitemagyarország #live #stream #magyarstream #legjobbstreamer #legjobbmagyarstreamer #fortnite #memes #fortnitememes #meme #gaming #funny #dankmemes #gamer #fortniteclips #fortnitebattleroyale #dank #xbox #lol #fortnitecommunity #twitch #ps4 #youtube #fortnitebr #funnymemes #memesdaily #edgymemes #comedy #pubg #like"""
 
 TAGS_TEMPLATE = [
-	"bs",
-	"brawlstars",
-	"játék",
-	"fortnite",
-	"Shorts",
-	"call of duty",
-	"cod",
-	"warzone",
-	"warzone 2.0",
-	"gaming mix 2026",
-	"ncs gaming mix,"
-	"gaming pc,"
-	"total gaming,"
-	"gaming room,"
-	"royalty gaming channel,"
-	"gaming pc build,"
-	"royalty gaming,"
-	"debrecen,"
-	"nyíregyháza,"
-	"kidcity gaming,"
-	"kids gaming,"
-	"ferran gaming,"
-	"family gaming,"
-	"valorant,"
-	"steam deck,"
-	"funny game,"
-	"action games,"
-	"pc games,"
-	"pc gaming,"
-	"játék,"
-	"magyar,"
-	"háborús,"
-	"best streamer,"
-	"sub,"
-	"game,"
-	"2025,"
-	"minecraft,"
-	"2026"
+    "bs","brawlstars","játék","fortnite","Shorts","call of duty","cod","warzone","warzone 2.0",
+    "gaming mix 2026","ncs gaming mix","gaming pc","total gaming","gaming room","royalty gaming channel",
+    "gaming pc build","royalty gaming","debrecen","nyíregyháza","kidcity gaming","kids gaming",
+    "ferran gaming","family gaming","valorant","steam deck","funny game","action games","pc games",
+    "pc gaming","játék","magyar","háborús","best streamer","sub","game","2025","minecraft","2026"
 ]
 
 PRIVACY_STATUS = "public"
-# PRIVACY_STATUS = "private"
-DEFAULT_LANGUAGE = "hu"      # videó nyelve
-CATEGORY_ID = 20             # Játékok
+DEFAULT_LANGUAGE = "hu"
+CATEGORY_ID = 20  # Játékok
 
-# Videó helye (Nyíregyháza)
-VIDEO_LOCATION = {
-    "latitude": 47.9556,
-    "longitude": 21.7167
-}
+VIDEO_LOCATION = {"latitude": 47.9556, "longitude": 21.7167}
 LOCATION_DESCRIPTION = "Nyíregyháza, Magyarország"
 
 def get_authenticated_service():
@@ -108,7 +71,6 @@ def get_authenticated_service():
     return build("youtube", "v3", credentials=credentials)
 
 def upload_video(youtube, file_path, title):
-    # Aktuális dátum ISO 8601 formátumban
     now_iso = datetime.now(timezone.utc).isoformat()
     request = youtube.videos().insert(
         part="snippet,status,recordingDetails",
@@ -119,12 +81,10 @@ def upload_video(youtube, file_path, title):
                 "tags": TAGS_TEMPLATE,
                 "categoryId": str(CATEGORY_ID),
                 "defaultLanguage": DEFAULT_LANGUAGE,
-								"defaultAudioLanguage": "hu",
+                "defaultAudioLanguage": "hu",
                 "videoGameTitle": "Fortnite"
             },
-            "status": {
-                "privacyStatus": PRIVACY_STATUS
-            },
+            "status": {"privacyStatus": PRIVACY_STATUS},
             "recordingDetails": {
                 "recordingDate": now_iso,
                 "location": VIDEO_LOCATION,
@@ -133,11 +93,25 @@ def upload_video(youtube, file_path, title):
         },
         media_body=MediaFileUpload(file_path)
     )
-
     response = request.execute()
     print(f"Video uploaded: {title}")
     print(f"Video ID: {response['id']}")
     print(f"YouTube link: https://www.youtube.com/watch?v={response['id']}\n")
+
+def clear_public_folder_and_titles():
+    # public mappa tartalmának törlése
+    if os.path.exists(VIDEOS_FOLDER):
+        for f in os.listdir(VIDEOS_FOLDER):
+            file_path = os.path.join(VIDEOS_FOLDER, f)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        print(f"A '{VIDEOS_FOLDER}' mappa tartalma törölve lett.")
+
+    # titles.txt tartalmának ürítése (fájl megmarad)
+    if os.path.exists(TITLES_FILE):
+        with open(TITLES_FILE, "w", encoding="utf-8") as f:
+            pass  # üres írás
+        print(f"A '{TITLES_FILE}' tartalma törölve lett.")
 
 if __name__ == "__main__":
     youtube = get_authenticated_service()
@@ -154,5 +128,8 @@ if __name__ == "__main__":
 
     for video_file in videos:
         file_path = os.path.join(VIDEOS_FOLDER, video_file)
-        title = os.path.splitext(video_file)[0]  # fájlnév kiterjesztés nélkül
+        title = os.path.splitext(video_file)[0]
         upload_video(youtube, file_path, title)
+
+    # a végén törlés
+    clear_public_folder_and_titles()
