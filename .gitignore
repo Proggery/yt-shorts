@@ -1,2 +1,5 @@
 videos/*
 !videos/.gitkeep
+venv/
+client_secret.json
+token.pickle
