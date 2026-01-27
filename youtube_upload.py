@@ -40,7 +40,47 @@ A GeryHell csatorna közvetítései:
 
 #játék #magyar #fortnite #bs #brawlstars #fortnitemagyar #fortnitemagyarul #fortnitemagyarország #live #stream #magyarstream #legjobbstreamer #legjobbmagyarstreamer #fortnite #memes #fortnitememes #meme #gaming #funny #dankmemes #gamer #fortniteclips #fortnitebattleroyale #dank #xbox #lol #fortnitecommunity #twitch #ps4 #youtube #fortnitebr #funnymemes #memesdaily #edgymemes #comedy #pubg #like"""
 
-TAGS_TEMPLATE = ["bs", "brawlstars", "játék", "fortnite"]  # címkék
+TAGS_TEMPLATE = [
+	"bs",
+	"brawlstars",
+	"játék",
+	"fortnite",
+	"Shorts",
+	"call of duty",
+	"cod",
+	"warzone",
+	"warzone 2.0",
+	"gaming mix 2026",
+	"ncs gaming mix,"
+	"gaming pc,"
+	"total gaming,"
+	"gaming room,"
+	"royalty gaming channel,"
+	"gaming pc build,"
+	"royalty gaming,"
+	"debrecen,"
+	"nyíregyháza,"
+	"kidcity gaming,"
+	"kids gaming,"
+	"ferran gaming,"
+	"family gaming,"
+	"valorant,"
+	"steam deck,"
+	"funny game,"
+	"action games,"
+	"pc games,"
+	"pc gaming,"
+	"játék,"
+	"magyar,"
+	"háborús,"
+	"best streamer,"
+	"sub,"
+	"game,"
+	"2025,"
+	"minecraft,"
+	"2026"
+]
+
 PRIVACY_STATUS = "public"
 # PRIVACY_STATUS = "private"
 DEFAULT_LANGUAGE = "hu"      # videó nyelve
