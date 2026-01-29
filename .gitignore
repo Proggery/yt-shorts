@@ -2,6 +2,8 @@ public/*
 !public/.gitkeep
 videos/*
 !videos/.gitkeep
+tiktok/*
+!tiktok/.gitkeep
 venv/
 client_secret.json
 token.pickle
